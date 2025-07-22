@@ -20,19 +20,23 @@ jobs:
                 terraform_version: 1.6.0
 
             - name: Terraform fmt
+              working-directory: ./modules/google-artifact-registry
               id: fmt
               run: terraform fmt -check
               continue-on-error: true
 
             - name: Terraform init
+              working-directory: ./modules/google-artifact-registry
               id: init
               run: terraform init -input=false
 
             - name: Terraform validate
+              working-directory: ./modules/google-artifact-registry
               id: validate
               run: terraform validate
 
             - name: Terraform plan
+              working-directory: ./modules/google-artifact-registry
               id: plan
               run: terraform plan
               continue-on-error: true
