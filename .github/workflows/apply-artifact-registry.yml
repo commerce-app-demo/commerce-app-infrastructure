@@ -34,6 +34,11 @@ jobs:
               working-directory: ./modules/google-artifact-registry
               id: validate
               run: terraform validate
+            
+            - name: Auth
+              uses: google-github-actions/auth@v2
+              with: 
+                credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
 
             - name: Terraform plan
               working-directory: ./modules/google-artifact-registry
