@@ -10,6 +10,8 @@ jobs:
           contents: read 
           pull-requests: write
         runs-on: ubuntu-latest
+        env:
+          tf_actions_working_dir: ./modules/google-artifact-registry
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
@@ -20,18 +22,18 @@ jobs:
                 terraform_version: 1.6.0
 
             - name: Terraform fmt
-              working-directory: ./modules/google-artifact-registry
+              working-directory: ${{ env.tf_actions_working_dir }}
               id: fmt
               run: terraform fmt -check
               continue-on-error: true
 
             - name: Terraform init
-              working-directory: ./modules/google-artifact-registry
+              working-directory: ${{ env.tf_actions_working_dir }}
               id: init
               run: terraform init -input=false
 
             - name: Terraform validate
-              working-directory: ./modules/google-artifact-registry
+              working-directory: ${{ env.tf_actions_working_dir }}
               id: validate
               run: terraform validate
             
@@ -41,7 +43,7 @@ jobs:
                 credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
 
             - name: Terraform plan
-              working-directory: ./modules/google-artifact-registry
+              working-directory: ${{ env.tf_actions_working_dir }}
               id: plan
               run: terraform plan
               continue-on-error: true
