@@ -12,6 +12,12 @@ jobs:
       env: 
         tf_actions_working_dir: ./modules/google-artifact-registry
       steps:
+        - name: Get PR head commit
+          id: pr_head
+          run: |
+            PR_HEAD_SHA=$(git rev-parse HEAD~1)
+            echo "sha=$PR_HEAD_SHA" >> $GITHUB_OUTPUT
+
         - name: Checkout code
           uses: actions/checkout@v4
         
@@ -28,7 +34,7 @@ jobs:
         - name: Download plan
           uses: actions/download-artifact@v4
           with:
-            name: terraform-plan-${{ github.event.before }}
+            name: terraform-plan-${{ steps.pr_head.outputs.sha }}
         
         - name: Terraform apply
           working-directory: ${{ env.tf_actions_working_dir }}
